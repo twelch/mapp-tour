@@ -76,39 +76,55 @@ export default class CoreLayout extends React.Component {
     window.addEventListener("keydown", this.onKeyPress, false);
   }
 
+
+
   /*
    * onKeyPress - adds keyboard controls to tour including spacebar to pause/play, and left and right arrows
    */
   onKeyPress(e) {
     var key = 'which' in e ? e.which : e.keyCode;
     if (key === 37) {
-      console.log('preving');
       this.prev();
     } else if (key === 39) {
-      console.log('nexting');
       this.next();
     } else if (key === 32) {
-      console.log('toggling');
       this.toggle();
     }
   }
 
+  /*
+   * getMat - get current gl map object
+   */
   getMap() {
     return this.map;
   }
 
-  // Returns index of current view
+  /*
+   * getView - return view object at given index
+   */
+  getView(index) {
+    return views[index];
+  }
+
+  /*
+   * getCurViewIndex - get index of current view
+   */
   getCurViewIndex() {
     return views.findIndex((view) => {
       return view.route === this.props.location.pathname;
     });
   }
 
-  getView(index) {
-    // Return view object at index
-    return views[index];
+  /*
+   * getCurView - get the current view
+   */
+  getCurView() {
+    return views[this.getCurViewIndex()];
   }
 
+  /*
+   * prev - navigate to previous view
+   */
   prev() {
     const index = this.getCurViewIndex();
     if (index >= 1  && index <= views.length) {
@@ -119,6 +135,9 @@ export default class CoreLayout extends React.Component {
     }
   }
 
+  /*
+   * next - navigate to next view
+   */
   next() {
     const index = this.getCurViewIndex();
     if (index >= 0  && index <= views.length) {
@@ -129,8 +148,11 @@ export default class CoreLayout extends React.Component {
     }
   }
 
+  /*
+   * toggle - switch between pause and play
+   */
   toggle() {
-    console.log('toggle');
+    console.log('pause/play not yet implemented');
   }
 
   _onLeftNavChange(e, key, payload) {
@@ -188,6 +210,9 @@ export default class CoreLayout extends React.Component {
       }
     };
 
+    //Get view text
+    const curView = this.getCurView();
+
     return (
       <div className='page-container'>
         {appbar}
@@ -204,7 +229,7 @@ export default class CoreLayout extends React.Component {
           token={appconfig.token.map}
           onLoad={this._onMapLoad}/>
         <div style={style.rightBar} className='right-bar'>
-          Foobly dooblyszzz
+          {curView.text}
         </div>
         {newViews}
       </div>

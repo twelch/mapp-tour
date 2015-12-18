@@ -1,4 +1,4 @@
-import { Route, IndexRoute }   from 'react-router';
+import { Route }   from 'react-router';
 import React       from 'react';
 import CoreLayout  from 'layouts/CoreLayout';
 import View1    from 'views/View1';
