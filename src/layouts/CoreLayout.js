@@ -6,7 +6,7 @@ const injectTapEventPlugin = require('react-tap-event-plugin');
 const Sidebar = require('../components/Sidebar');
 import GLMap from '../components/GLMap';
 import appconfig from '../../config/client';
-import {views} from '../settings';
+import * as settings from '../settings';
 
 import 'styles/core.scss';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -100,51 +100,22 @@ export default class CoreLayout extends React.Component {
   }
 
   /*
-   * getView - return view object at given index
-   */
-  getView(index) {
-    return views[index];
-  }
-
-  /*
-   * getCurViewIndex - get index of current view
-   */
-  getCurViewIndex() {
-    return views.findIndex((view) => {
-      return view.route === this.props.location.pathname;
-    });
-  }
-
-  /*
-   * getCurView - get the current view
-   */
-  getCurView() {
-    return views[this.getCurViewIndex()];
-  }
-
-  /*
-   * prev - navigate to previous view
+   * prev - navigate to previous view if there is one
    */
   prev() {
-    const index = this.getCurViewIndex();
-    if (index >= 1  && index <= views.length) {
-      const view = this.getView(index - 1);
-      if (view) {
-        this.props.history.pushState(null, view.route);
-      }
+    const view = settings.getPrevViewByRoute(this.props.location.pathname);
+    if (view) {
+      this.props.history.pushState(null, view.route);
     }
   }
 
   /*
-   * next - navigate to next view
+   * next - navigate to next view if there is one
    */
   next() {
-    const index = this.getCurViewIndex();
-    if (index >= 0  && index <= views.length) {
-      const view = this.getView(index + 1);
-      if (view) {
-        this.props.history.pushState(null, view.route);
-      }
+    const view = settings.getNextViewByRoute(this.props.location.pathname);
+    if (view) {
+      this.props.history.pushState(null, view.route);
     }
   }
 
@@ -211,7 +182,7 @@ export default class CoreLayout extends React.Component {
     };
 
     //Get view text
-    const curView = this.getCurView();
+    const curView = settings.getViewByRoute(this.props.location.pathname);
 
     return (
       <div className='page-container'>
