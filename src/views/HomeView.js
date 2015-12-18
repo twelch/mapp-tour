@@ -35,7 +35,6 @@ export class HomeView extends React.Component {
 
   componentWillUnmount() {
     // Unload sources
-    clearInterval(this.interval);
     this.sources.forEach((source) => {
       this.map.removeSource(source);
     });
@@ -48,21 +47,10 @@ export class HomeView extends React.Component {
   }
 
   start() {
-    this.started = true;
-    var time = 0;
-    var timePerStep = 100;
-
     this.map.easeTo({
       pitch: 80,
       duration: 2000
     });
-
-    this.interval = setInterval(function() {
-      time += timePerStep;
-      if (time === 5000) {
-        this.done();
-      }
-    }.bind(this), timePerStep);    
   }
 
   done() {
@@ -71,7 +59,11 @@ export class HomeView extends React.Component {
   }
 
   render () {
-    return null;
+    return (
+      <div>
+        This is the home view
+      </div>
+    );
   }
 }
 

@@ -49,8 +49,8 @@ export class View1 extends React.Component {
 
   start() {
     this.started = true;
-    var time = 0;
-    var timePerStep = 100;
+    let time = 0;
+    const timePerStep = 100;
 
     this.map.easeTo({
       bearing: 90,
@@ -58,7 +58,7 @@ export class View1 extends React.Component {
       duration: 1000
     });
 
-    this.interval = setInterval(function() {
+    this.interval = setInterval(() => {
       time += timePerStep;
       if (time === 1000) {
         this.addContours();
@@ -66,7 +66,7 @@ export class View1 extends React.Component {
       if (time === 10000) {
         this.done();
       }
-    }.bind(this), timePerStep);    
+    }, timePerStep);
   }
 
   done() {
@@ -98,7 +98,9 @@ export class View1 extends React.Component {
   }
 
   render () {
-    return null;
+    return (
+      <div>This is view 1</div>
+    );
   }
 }
 

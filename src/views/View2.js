@@ -61,7 +61,9 @@ export class View2 extends React.Component {
   }
 
   render () {
-    return null;
+    return (
+      <div>This is view 2</div>
+    );
   }
 }
 

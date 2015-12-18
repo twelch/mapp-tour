@@ -56,7 +56,7 @@ export default class CoreLayout extends React.Component {
     this._showLeftNavClick = this._showLeftNavClick.bind(this);
     this._onLeftNavChange = this._onLeftNavChange.bind(this);
     this._onMapLoad = this._onMapLoad.bind(this);
-    this.onKeyPress = this.onKeyPress.bind(this)
+    this.onKeyPress = this.onKeyPress.bind(this);
 
     this.mapView = {
       style: 'mapbox://styles/mapbox/light-v8',
@@ -73,16 +73,14 @@ export default class CoreLayout extends React.Component {
 
   componentDidMount() {
     // Track keypress events
-    window.addEventListener("keydown", this.onKeyPress, false);
+    window.addEventListener('keydown', this.onKeyPress, false);
   }
-
-
 
   /*
    * onKeyPress - adds keyboard controls to tour including spacebar to pause/play, and left and right arrows
    */
   onKeyPress(e) {
-    var key = 'which' in e ? e.which : e.keyCode;
+    const key = 'which' in e ? e.which : e.keyCode;
     if (key === 37) {
       this.prev();
     } else if (key === 39) {
@@ -123,7 +121,7 @@ export default class CoreLayout extends React.Component {
    * toggle - switch between pause and play
    */
   toggle() {
-    console.log('pause/play not yet implemented');
+    // NOT YET IMPLEMENTED
   }
 
   _onLeftNavChange(e, key, payload) {
@@ -181,9 +179,6 @@ export default class CoreLayout extends React.Component {
       }
     };
 
-    //Get view text
-    const curView = settings.getViewByRoute(this.props.location.pathname);
-
     return (
       <div className='page-container'>
         {appbar}
@@ -200,9 +195,8 @@ export default class CoreLayout extends React.Component {
           token={appconfig.token.map}
           onLoad={this._onMapLoad}/>
         <div style={style.rightBar} className='right-bar'>
-          {curView.text}
+          {newViews}
         </div>
-        {newViews}
       </div>
     );
   }

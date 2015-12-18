@@ -5,18 +5,15 @@ import HomeView from 'views/HomeView';
 export const views = [{
   name: 'Main Menu',
   route: '/',
-  component: HomeView,
-  text: 'Main Menu'
+  component: HomeView
 }, {
   name: 'Street Scene',
   route: '/street',
-  component: View1,
-  text: 'This is view 1'
+  component: View1
 }, {
   name: 'Drugstore Parking',
   route: '/store-parking',
-  component: View2,
-  text: 'This is view 2'
+  component: View2
 }];
 
 /*
@@ -35,6 +32,19 @@ export function getViewByRoute(route) {
   });
 }
 
+/*
+ * getIndexByRoute - get index of view at given route
+ */
+export function getIndexByRoute(route) {
+  return views.findIndex((view) => {
+    return view.route === route;
+  });
+}
+
+
+/*
+ * getNextViewByRoute - get next view given route of current view
+ */
 export function getNextViewByRoute(route) {
   const index = getIndexByRoute(route);
   if (index >= 0  && index <= views.length) {
@@ -44,6 +54,9 @@ export function getNextViewByRoute(route) {
   return undefined;
 }
 
+/*
+ * getPrevViewByRoute - get prev view given route of current view
+ */
 export function getPrevViewByRoute(route) {
   const index = getIndexByRoute(route);
   if (index >= 1  && index <= views.length) {
@@ -53,18 +66,4 @@ export function getPrevViewByRoute(route) {
   return undefined;
 }
 
-/*
- * getCurViewIndex - get index of current view
- */
-export function getIndexByRoute(route) {
-  return views.findIndex((view) => {
-    return view.route === route;
-  });
-}
 
-/*
- * getCurView - get the current view
- */
-export function getCurView() {
-  return views[this.getCurViewIndex()];
-}
