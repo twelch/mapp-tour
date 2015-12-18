@@ -1,7 +1,5 @@
 import React                  from 'react';
 import { connect }            from 'react-redux';
-import GLMap                  from '../components/GLMap';
-import appconfig                 from '../../config/client';
 
 const mapStateToProps = (state) => ({
   mapState : state.map,
@@ -10,49 +8,43 @@ const mapStateToProps = (state) => ({
 
 export class View2 extends React.Component {
   static propTypes = {
-    mapState  : React.PropTypes.object
+    mapState  : React.PropTypes.object,
+    getMap: React.PropTypes.func
   }
 
-  constructor () {
+  constructor() {
     super();
-    this.mapView = {
-      style: 'mapbox://styles/mapbox/streets-v8',
-      center: [12.343633, 45.433189],
-      pitch: 45,
-      bearing: 270,
-      zoom: 16,
-      container: 'map'
-    };
+    this.started = false;
   }
 
   componentDidMount() {
-    window.setTimeout(() => {
-      this.refs.glmap.map.flyTo({
-        center: [12.327347, 45.442500],
-        bearing: 0,
-        zoom: 18,
-        speed: 0.2
-      });
-    }, 12000);
+    this.map = this.props.getMap().map;
+    if (this.props.mapState.loaded && !this.started) {
+      this._start();
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.mapState.loaded && !this.started) {
+      this._start();
+    }
+  }
+
+  componentWillUnmount() {
+    this.started = false;
+  }
+
+  _start() {
+    this.started = true;
+    this.map.easeTo({
+      bearing: 0,
+      pitch: 0,
+      duration: 5000
+    });
   }
 
   render () {
-    const mapStyle = {
-      position: 'absolute',
-      top:0,
-      bottom:0,
-      width:'100%'
-    };
-    return (
-      <div>
-        <GLMap
-          ref='glmap'
-          mapStyle={mapStyle}
-          view={this.mapView}
-          baselayer={this.props.mapState.baselayer}
-          token={appconfig.token.map} />
-      </div>
-    );
+    return null;
   }
 }
 

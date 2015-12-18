@@ -13,8 +13,10 @@ class GLMap extends Component {
     baselayer: React.PropTypes.string,
     // Mapbox map token
     token: React.PropTypes.string,
-    // onStyleEvent fired after style loaded.  Map object is passed
-    onStyleLoad: React.PropTypes.func
+    // onStyleLoad event fired after style loaded.  Map object is passed
+    onStyleLoad: React.PropTypes.func,
+    // onLoad event fired after map fully loaded.  Map object is passed
+    onLoad: React.PropTypes.func
   }
 
   componentDidMount() {
@@ -39,6 +41,12 @@ class GLMap extends Component {
         this.props.onStyleLoad(this.map);
       }
     });
+
+    this.map.on('load', () => {
+      if (this.props.onLoad) {
+        this.props.onLoad(this.map);
+      }
+    });
   }
 
   componentDidUpdate() {
@@ -53,11 +61,21 @@ class GLMap extends Component {
     this.map.remove();
   }
 
+  setFilter(layer, filter) {
+    this.map.setFilter(layer, filter);
+  }
+
+  fitBounds(bounds) {
+    this.map.fitBounds(bounds);
+  }
+
+  batch(work) {
+    this.map.batch(work);
+  }
+
   render() {
     return (
-      <div>
-        <div style={this.props.mapStyle} id='map'></div>
-      </div>
+      <div style={this.props.mapStyle} id='map'></div>
     );
   }
 }

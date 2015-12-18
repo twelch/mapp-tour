@@ -1,7 +1,5 @@
 import React                  from 'react';
 import { connect }            from 'react-redux';
-import GLMap                  from '../components/GLMap';
-import appconfig                 from '../../config/client';
 
 const mapStateToProps = (state) => ({
   mapState : state.map,
@@ -10,26 +8,50 @@ const mapStateToProps = (state) => ({
 
 export class View1 extends React.Component {
   static propTypes = {
-    mapState  : React.PropTypes.object
+    mapState  : React.PropTypes.object,
+    getMap: React.PropTypes.func
   }
 
   constructor() {
     super();
-    this.mapView = {
-      style: 'mapbox://styles/mapbox/light-v8',
-      center: [138.727778, 35.360555],
-      zoom: 11,
-      container: 'map'
-    };
-    this._addContours = this._addContours.bind(this);
+    this.started = false;
   }
 
-  _addContours(map) {
-    map.addSource('terrain-data', {
+  componentDidMount() {
+    this.map = this.props.getMap().map;
+    if (this.props.mapState.loaded && !this.started) {
+      this._start();
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.mapState.loaded && !this.started) {
+      this._start();
+    }
+  }
+
+  componentWillUnmount() {
+    this.started = false;
+    this.map.removeLayer('contour');
+    this.map.removeSource('terrain-data');
+  }
+
+  _start() {
+    this.started = true;
+    this._addContours();
+    this.map.easeTo({
+      bearing: 180,
+      pitch: 45,
+      duration: 5000
+    });
+  }
+
+  _addContours() {
+    this.map.addSource('terrain-data', {
       type: 'vector',
       url: 'mapbox://mapbox.mapbox-terrain-v2'
     });
-    map.addLayer({
+    this.map.addLayer({
       'id': 'contour',
       'type': 'line',
       'source': 'terrain-data',
@@ -46,24 +68,7 @@ export class View1 extends React.Component {
   }
 
   render () {
-    const mapStyle = {
-      position: 'absolute',
-      top:0,
-      bottom:0,
-      width:'100%'
-    };
-
-    return (
-      <div>
-        <GLMap
-        ref='glmap'
-        mapStyle={mapStyle}
-        view={this.mapView}
-        baselayer={this.props.mapState.baselayer}
-        token={appconfig.token.map}
-        onStyleLoad={this._addContours} />
-      </div>
-    );
+    return null;
   }
 }
 

@@ -4,6 +4,8 @@ const { connect } = require('react-redux');
 const { AppBar } = require('material-ui');
 const injectTapEventPlugin = require('react-tap-event-plugin');
 const Sidebar = require('../components/Sidebar');
+import GLMap                  from '../components/GLMap';
+import appconfig                 from '../../config/client';
 
 import 'styles/core.scss';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -16,6 +18,10 @@ const actionCreators = {
   changeBaseLayer : (layer) => ({
     type : 'CHANGE_BASELAYER',
     payload : layer
+  }),
+  setMapLoaded : () => ({
+    type : 'SET_LOADED',
+    payload : true
   })
 };
 // Create dispatchers from action creators and assign to actions prop
@@ -39,9 +45,26 @@ export default class CoreLayout extends React.Component {
 
   constructor () {
     super();
+    this.map = undefined; // Reference to GLMap component
+
     // Set handler scope as es6 doesn't do this for us
-    this. _showLeftNavClick = this. _showLeftNavClick.bind(this);
-    this. _onLeftNavChange = this. _onLeftNavChange.bind(this);
+    this._showLeftNavClick = this._showLeftNavClick.bind(this);
+    this._onLeftNavChange = this._onLeftNavChange.bind(this);
+    this._onMapLoad = this._onMapLoad.bind(this);
+
+    this.mapView = {
+      style: 'mapbox://styles/mapbox/light-v8',
+      center: [138.727778, 35.360555],
+      zoom: 11,
+      container: 'map'
+    };
+
+    this._addMapAccess = this._addMapAccess.bind(this);
+    this.getMap = this.getMap.bind(this);
+  }
+
+  getMap() {
+    return this.map;
   }
 
   _onLeftNavChange(e, key, payload) {
@@ -56,6 +79,18 @@ export default class CoreLayout extends React.Component {
     this.refs.sidebar.toggle();
   }
 
+  _setMap(map) {
+    this.map = map;
+  }
+
+  _addMapAccess(element) {
+    return React.cloneElement(element, {getMap: this.getMap});
+  }
+
+  _onMapLoad() {
+    this.props.actions.setMapLoaded();
+  }
+
   render () {
     const barStyle = {
       top: 0,
@@ -65,27 +100,46 @@ export default class CoreLayout extends React.Component {
       boxShadow: 'none'
     };
 
-    let appbar = '';
-    if (this.props.location.pathname !== '/') {
-      appbar = (
-        <AppBar
-        className='c-app-bar'
-        style={barStyle}
-        onLeftIconButtonTouchTap={this._showLeftNavClick} />
-      );
-    }
+    const appbar = (
+      <AppBar
+      className='c-app-bar'
+      style={barStyle}
+      onLeftIconButtonTouchTap={this._showLeftNavClick} />
+    );
+
+    const scenes = React.Children.map(this.props.children, this._addMapAccess);
+
+    const style = {
+      map: {
+        width:'65%',
+        height: '100%'
+      },
+      rightBar: {
+        width: '35%'
+      }
+    };
+
+    
 
     return (
       <div className='page-container'>
-        <div className='view-container'>
-          <Sidebar
+        {appbar}
+        <Sidebar
           ref="sidebar"
           docked={false}
           onChange={this._onLeftNavChange}
           mapState={this.props.mapState} />
-          {this.props.children}
+        <GLMap
+          ref={(c) => this._setMap(c)}
+          mapStyle={style.map}
+          view={this.mapView}
+          baselayer={this.props.mapState.baselayer}
+          token={appconfig.token.map}
+          onLoad={this._onMapLoad}/>
+        <div style={style.rightBar} className='right-bar'>
+          Foobly dooblyszzz
         </div>
-        {appbar}
+        {scenes}
       </div>
     );
   }

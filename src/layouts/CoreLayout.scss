@@ -6,3 +6,29 @@
   background: -ms-linear-gradient(top, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0) 100%); /* IE10+ */
   background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0) 100%); /* W3C */
 }
+
+.page-container {
+  display: flex;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.map-container {
+  width: 70%;
+  height: 100%;
+}
+
+.right-bar {
+  width: 30%;
+  background-color: #142736;
+  color: white;
+  font-size: 30px;
+  font-family: 'Roboto';
+  font-weight: 200;
+  padding: 0px 20px;
+  line-height: 40px;
+  letter-spacing: 2px;
+}

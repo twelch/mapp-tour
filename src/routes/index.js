@@ -4,11 +4,12 @@ import CoreLayout  from 'layouts/CoreLayout';
 import HomeView    from 'views/HomeView';
 import View1    from 'views/View1';
 import View2    from 'views/View2';
+const settings = require('../settings');
 
 export default (
   <Route path='/' component={CoreLayout}>
-    <IndexRoute component={HomeView} />
-    <Route path="view1" component={View1} />
-    <Route path="view2" component={View2} />
+    {settings.views.map(function genItems(view) {
+      return <Route key={view.key} path={view.route} component={view.component} />;
+    })}
   </Route>
 );

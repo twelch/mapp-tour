@@ -1,6 +1,5 @@
 import React from 'react';
-const { LeftNav, MenuItem } = require('material-ui');
-const settings = require('../settings');
+const { LeftNav} = require('material-ui');
 
 class Sidebar extends React.Component {
   // Props validation
@@ -17,17 +16,10 @@ class Sidebar extends React.Component {
   }
 
   render() {
-    // Generate menu items from list of views
-    const mapViews = settings.views.map(function genItems(view) {
-      return {
-        text: view.name,
-        route: view.route
-      };
-    });
-
     const menuItems = [
-      { type: MenuItem.Types.SUBHEADER, text: 'Tour' },
-      ...mapViews
+      { route: '/', text: 'Main Menu' },
+      { route: '/view1', text: 'Mount Fuji Contours' },
+      { route: '/view2', text: 'Venice Fly' }
     ];
 
     // Break out props to consume and leave rest to pass on
