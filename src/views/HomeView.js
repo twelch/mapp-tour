@@ -20,6 +20,8 @@ export class HomeView extends React.Component {
     this.layers = [];
   }
 
+  /******** LIFECYCLE ********/
+
   componentDidMount() {
     this.map = this.props.getMap().map;
     if (this.props.mapState.loaded && !this.started) {
@@ -46,6 +48,8 @@ export class HomeView extends React.Component {
     this.layers = [];
   }
 
+  /******** BOOTSTRAP ********/
+
   start() {
     this.map.easeTo({
       pitch: 80,
@@ -57,6 +61,10 @@ export class HomeView extends React.Component {
     this.started = false;
     this.props.onViewDone();
   }
+
+  /******** STEPS ********/
+
+  /******** RENDER ********/
 
   render () {
     return (

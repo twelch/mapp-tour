@@ -20,6 +20,8 @@ export class View1 extends React.Component {
     this.layers = [];
   }
 
+  /******** LIFECYCLE ********/
+
   componentDidMount() {
     this.map = this.props.getMap().map;
     if (this.props.mapState.loaded && !this.started) {
@@ -46,6 +48,8 @@ export class View1 extends React.Component {
     });
     this.layers = [];
   }
+
+  /******** BOOTSTRAP ********/
 
   start() {
     this.started = true;
@@ -74,6 +78,8 @@ export class View1 extends React.Component {
     this.props.onViewDone();
   }
 
+  /******** STEPS ********/
+
   addContours() {
     this.map.addSource('terrain-data', {
       type: 'vector',
@@ -97,6 +103,8 @@ export class View1 extends React.Component {
     this.layers.push('contour');
   }
 
+  /******** RENDER ********/
+  
   render () {
     return (
       <div>This is view 1</div>
