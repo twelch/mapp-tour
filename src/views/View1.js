@@ -9,48 +9,77 @@ const mapStateToProps = (state) => ({
 export class View1 extends React.Component {
   static propTypes = {
     mapState  : React.PropTypes.object,
-    getMap: React.PropTypes.func
+    getMap: React.PropTypes.func,
+    onViewDone: React.PropTypes.func
   }
 
   constructor() {
     super();
     this.started = false;
+    this.sources = [];
+    this.layers = [];
   }
 
   componentDidMount() {
     this.map = this.props.getMap().map;
     if (this.props.mapState.loaded && !this.started) {
-      this._start();
+      this.start();
     }
   }
 
   componentDidUpdate() {
     if (this.props.mapState.loaded && !this.started) {
-      this._start();
+      this.start();
     }
   }
 
   componentWillUnmount() {
-    this.started = false;
-    this.map.removeLayer('contour');
-    this.map.removeSource('terrain-data');
-  }
-
-  _start() {
-    this.started = true;
-    this._addContours();
-    this.map.easeTo({
-      bearing: 180,
-      pitch: 45,
-      duration: 5000
+    // Unload sources
+    clearInterval(this.interval);
+    this.sources.forEach((source) => {
+      this.map.removeSource(source);
     });
+    this.sources = [];
+    // Unload layers
+    this.layers.forEach((layer) => {
+      this.map.removeLayer(layer);
+    });
+    this.layers = [];
   }
 
-  _addContours() {
+  start() {
+    this.started = true;
+    var time = 0;
+    var timePerStep = 100;
+
+    this.map.easeTo({
+      bearing: 90,
+      pitch: 45,
+      duration: 1000
+    });
+
+    this.interval = setInterval(function() {
+      time += timePerStep;
+      if (time === 1000) {
+        this.addContours();
+      }
+      if (time === 10000) {
+        this.done();
+      }
+    }.bind(this), timePerStep);    
+  }
+
+  done() {
+    this.started = false;
+    this.props.onViewDone();
+  }
+
+  addContours() {
     this.map.addSource('terrain-data', {
       type: 'vector',
       url: 'mapbox://mapbox.mapbox-terrain-v2'
     });
+    this.sources.push('terrain-data');
     this.map.addLayer({
       'id': 'contour',
       'type': 'line',
@@ -65,6 +94,7 @@ export class View1 extends React.Component {
         'line-width': 1
       }
     });
+    this.layers.push('contour');
   }
 
   render () {

@@ -3,13 +3,13 @@ import View2 from 'views/View2';
 
 export default {
   views: [{
-    key: 1,
+    key: 0,
     name: 'Street Scene',
     route: '/street',
     component: View1,
     text: 'This is view 1'
   }, {
-    key: 2,
+    key: 1,
     name: 'Drugstore Parking',
     route: '/store-parking',
     component: View2,

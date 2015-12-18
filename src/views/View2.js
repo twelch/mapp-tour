@@ -9,7 +9,8 @@ const mapStateToProps = (state) => ({
 export class View2 extends React.Component {
   static propTypes = {
     mapState  : React.PropTypes.object,
-    getMap: React.PropTypes.func
+    getMap: React.PropTypes.func,
+    onViewDone: React.PropTypes.func
   }
 
   constructor() {
@@ -20,27 +21,43 @@ export class View2 extends React.Component {
   componentDidMount() {
     this.map = this.props.getMap().map;
     if (this.props.mapState.loaded && !this.started) {
-      this._start();
+      this.start();
     }
   }
 
   componentDidUpdate() {
     if (this.props.mapState.loaded && !this.started) {
-      this._start();
+      this.start();
     }
   }
 
   componentWillUnmount() {
-    this.started = false;
+    clearInterval(this.interval);
   }
 
-  _start() {
+  start() {
     this.started = true;
+    let time = 0;
+    const timePerStep = 100;
+
     this.map.easeTo({
-      bearing: 0,
+      bearing: 270,
       pitch: 0,
-      duration: 5000
+      duration: 2000,
+      zoom: 10
     });
+
+    this.interval = setInterval(() => {
+      time += timePerStep;
+      if (time === 10000) {
+        this.done();
+      }
+    }, timePerStep);
+  }
+
+  done() {
+    this.started = false;
+    this.props.onViewDone();
   }
 
   render () {

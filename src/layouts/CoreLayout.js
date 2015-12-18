@@ -4,8 +4,9 @@ const { connect } = require('react-redux');
 const { AppBar } = require('material-ui');
 const injectTapEventPlugin = require('react-tap-event-plugin');
 const Sidebar = require('../components/Sidebar');
-import GLMap                  from '../components/GLMap';
-import appconfig                 from '../../config/client';
+import GLMap from '../components/GLMap';
+import appconfig from '../../config/client';
+import {views} from '../settings';
 
 import 'styles/core.scss';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -43,6 +44,10 @@ export default class CoreLayout extends React.Component {
     actions : React.PropTypes.object
   }
 
+  static contextTypes = {
+    store: React.PropTypes.object
+  }
+
   constructor () {
     super();
     this.map = undefined; // Reference to GLMap component
@@ -51,6 +56,7 @@ export default class CoreLayout extends React.Component {
     this._showLeftNavClick = this._showLeftNavClick.bind(this);
     this._onLeftNavChange = this._onLeftNavChange.bind(this);
     this._onMapLoad = this._onMapLoad.bind(this);
+    this.onKeyPress = this.onKeyPress.bind(this)
 
     this.mapView = {
       style: 'mapbox://styles/mapbox/light-v8',
@@ -59,12 +65,72 @@ export default class CoreLayout extends React.Component {
       container: 'map'
     };
 
-    this._addMapAccess = this._addMapAccess.bind(this);
+    this.addProps = this.addProps.bind(this);
+    this.next = this.next.bind(this);
+    this.prev = this.prev.bind(this);
     this.getMap = this.getMap.bind(this);
+  }
+
+  componentDidMount() {
+    // Track keypress events
+    window.addEventListener("keydown", this.onKeyPress, false);
+  }
+
+  /*
+   * onKeyPress - adds keyboard controls to tour including spacebar to pause/play, and left and right arrows
+   */
+  onKeyPress(e) {
+    var key = 'which' in e ? e.which : e.keyCode;
+    if (key === 37) {
+      console.log('preving');
+      this.prev();
+    } else if (key === 39) {
+      console.log('nexting');
+      this.next();
+    } else if (key === 32) {
+      console.log('toggling');
+      this.toggle();
+    }
   }
 
   getMap() {
     return this.map;
+  }
+
+  // Returns index of current view
+  getCurViewIndex() {
+    return views.findIndex((view) => {
+      return view.route === this.props.location.pathname;
+    });
+  }
+
+  getView(index) {
+    // Return view object at index
+    return views[index];
+  }
+
+  prev() {
+    const index = this.getCurViewIndex();
+    if (index >= 1  && index <= views.length) {
+      const view = this.getView(index - 1);
+      if (view) {
+        this.props.history.pushState(null, view.route);
+      }
+    }
+  }
+
+  next() {
+    const index = this.getCurViewIndex();
+    if (index >= 0  && index <= views.length) {
+      const view = this.getView(index + 1);
+      if (view) {
+        this.props.history.pushState(null, view.route);
+      }
+    }
+  }
+
+  toggle() {
+    console.log('toggle');
   }
 
   _onLeftNavChange(e, key, payload) {
@@ -83,8 +149,11 @@ export default class CoreLayout extends React.Component {
     this.map = map;
   }
 
-  _addMapAccess(element) {
-    return React.cloneElement(element, {getMap: this.getMap});
+  addProps(element) {
+    return React.cloneElement(element, {
+      getMap: this.getMap,
+      onViewDone: this.next
+    });
   }
 
   _onMapLoad() {
@@ -107,7 +176,7 @@ export default class CoreLayout extends React.Component {
       onLeftIconButtonTouchTap={this._showLeftNavClick} />
     );
 
-    const scenes = React.Children.map(this.props.children, this._addMapAccess);
+    const newViews = React.Children.map(this.props.children, this.addProps);
 
     const style = {
       map: {
@@ -118,8 +187,6 @@ export default class CoreLayout extends React.Component {
         width: '35%'
       }
     };
-
-    
 
     return (
       <div className='page-container'>
@@ -139,7 +206,7 @@ export default class CoreLayout extends React.Component {
         <div style={style.rightBar} className='right-bar'>
           Foobly dooblyszzz
         </div>
-        {scenes}
+        {newViews}
       </div>
     );
   }
