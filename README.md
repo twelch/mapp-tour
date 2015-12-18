@@ -1,30 +1,22 @@
-React Mapbox GL JS Starter Kit
+Map Tour
 =======================
 
-Starter kit to get you up and running with Mapbox GL JS and React and friends including:
+Powerful little map-based tour prototype for storytelling.  Single-page-app that transitions through a series of map views.
 
-* React-dom
-* React-flexr
-* React-router
-* Redux
-* Redux-router
-* Redux-thunk
-* Babel
-* Webpack
-* SASS
-* Material-ui
-* Firebase static hosting
+Each view manages itself according to the React component lifecycle: bootstrapping itself on mount, setting event timers, adding map sources and layers, running animations, etc. and then cleaning up after itself on unmount, ready for the next view.  
 
-[View the demo](https://reactmaps.firebaseapp.com)
+Each view has one associated React Component and Route and takes advantage of Browser History.  Includes keyboard controls for navigation - space, left, right.
 
-On mobile you can 'Add to homescreen' from your browser to get a more true app experience
+Based on [react-mapbox-gl-seed](https://github.com/twelch/react-mapbox-gl-seed).  Refactored to use one shared map across views instead of one map per view.
 
 Based on the [react-redux-starter-kit](https://github.com/davezuko/react-redux-starter-kit)
 
+Created by [Dots.Connect](http://dotsconnect.us)
+
 [Map icon](https://thenounproject.com/search/?q=map&i=23352) by Paul Stevens, GB
 
-README From react-redux-starter-kit
-=======================
+README
+======
 
 Requirements
 ------------
@@ -37,8 +29,8 @@ Getting Started
 Clone the repo and install dependencies:
 
 ```shell
-$ git clone https://github.com/twelch/react-mapbox-gl-seed.git
-$ cd react-mapbox-gl-seed
+$ git clone https://github.com/twelch/reactmap-tour.git
+$ cd reactmap-tour
 $ npm install
 ```
 
