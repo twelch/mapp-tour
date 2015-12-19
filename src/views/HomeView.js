@@ -36,6 +36,7 @@ export class HomeView extends React.Component {
   }
 
   componentWillUnmount() {
+    clearInterval(this.interval);
     // Unload sources
     this.sources.forEach((source) => {
       this.map.removeSource(source);
