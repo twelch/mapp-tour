@@ -20,7 +20,7 @@ export class View1 extends React.Component {
     this.layers = [];
   }
 
-  /******** LIFECYCLE ********/
+  /* LIFECYCLE */
 
   componentDidMount() {
     this.map = this.props.getMap().map;
@@ -36,8 +36,8 @@ export class View1 extends React.Component {
   }
 
   componentWillUnmount() {
-    // Unload sources
     clearInterval(this.interval);
+    // Unload sources
     this.sources.forEach((source) => {
       this.map.removeSource(source);
     });
@@ -49,7 +49,7 @@ export class View1 extends React.Component {
     this.layers = [];
   }
 
-  /******** BOOTSTRAP ********/
+  /* BOOTSTRAP */
 
   start() {
     this.started = true;
@@ -78,7 +78,7 @@ export class View1 extends React.Component {
     this.props.onViewDone();
   }
 
-  /******** STEPS ********/
+  /* STEPS */
 
   addContours() {
     this.map.addSource('terrain-data', {
@@ -103,8 +103,8 @@ export class View1 extends React.Component {
     this.layers.push('contour');
   }
 
-  /******** RENDER ********/
-  
+  /* RENDER */
+
   render () {
     return (
       <div>This is view 1</div>

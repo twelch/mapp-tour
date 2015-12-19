@@ -20,7 +20,7 @@ export class HomeView extends React.Component {
     this.layers = [];
   }
 
-  /******** LIFECYCLE ********/
+  /* LIFECYCLE */
 
   componentDidMount() {
     this.map = this.props.getMap().map;
@@ -48,7 +48,7 @@ export class HomeView extends React.Component {
     this.layers = [];
   }
 
-  /******** BOOTSTRAP ********/
+  /* BOOTSTRAP */
 
   start() {
     this.map.easeTo({
@@ -62,9 +62,9 @@ export class HomeView extends React.Component {
     this.props.onViewDone();
   }
 
-  /******** STEPS ********/
+  /* STEPS */
 
-  /******** RENDER ********/
+  /* RENDER */
 
   render () {
     return (

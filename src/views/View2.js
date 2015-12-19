@@ -18,7 +18,7 @@ export class View2 extends React.Component {
     this.started = false;
   }
 
-  /******** LIFECYCLE ********/
+  /* LIFECYCLE */
 
   componentDidMount() {
     this.map = this.props.getMap().map;
@@ -37,7 +37,7 @@ export class View2 extends React.Component {
     clearInterval(this.interval);
   }
 
-  /******** BOOTSTRAP ********/
+  /* BOOTSTRAP */
 
   start() {
     this.started = true;
@@ -64,9 +64,9 @@ export class View2 extends React.Component {
     this.props.onViewDone();
   }
 
-  /******** STEPS ********/
+  /* STEPS */
 
-  /******** RENDER ********/
+  /* RENDER */
 
   render () {
     return (
